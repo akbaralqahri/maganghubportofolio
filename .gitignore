@@ -24,3 +24,9 @@ me.HEIC
 # QA render previews (safe to delete these folders)
 _qa/
 _qa*/
+
+# Original UN-blurred dashboards (company-confidential) — site uses blurred .jpg
+dashboard-revenue.png
+dashboard-user.png
+dashboard-package.png
+dashboard-activity.png
