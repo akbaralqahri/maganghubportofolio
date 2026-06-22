@@ -21,6 +21,6 @@ me.HEIC
 *.heic
 *.HEIC
 
-# QA render previews (safe to delete the _qa folder)
+# QA render previews (safe to delete these folders)
 _qa/
-slide-*.jpg
+_qa*/
