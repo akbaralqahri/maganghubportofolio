@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" data-accent="cyan">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Ali Akbar Al-Qahri — Data Analyst</title>
+<meta name="description" content="Portofolio Muhammad Ali Akbar Al-Qahri — Data Analyst. Data pipeline end-to-end, star schema, dan dashboard Power BI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== THEME TOKENS ===== */
+  :root[data-theme="dark"]{
+    --bg:#0a0e14;
+    --bg-2:#0f1722;
+    --panel:#121b28;
+    --panel-2:#16212f;
+    --line:#1e2c3d;
+    --line-bright:#2a3d54;
+    --txt:#e6edf3;
+    --txt-dim:#8b9cb0;
+    --txt-faint:#5a6b7f;
+    --grid-op:.18;
+    --shadow:0 30px 80px -30px rgba(0,0,0,.8);
+    --nav-bg:rgba(10,14,20,.7);
+  }
+  :root[data-theme="light"]{
+    --bg:#f7f9fc;
+    --bg-2:#eef2f8;
+    --panel:#ffffff;
+    --panel-2:#f3f6fb;
+    --line:#e3e9f1;
+    --line-bright:#cdd7e4;
+    --txt:#101a27;
+    --txt-dim:#506074;
+    --txt-faint:#8a9aad;
+    --grid-op:.5;
+    --shadow:0 24px 60px -28px rgba(30,50,80,.28);
+    --nav-bg:rgba(247,249,252,.78);
+  }
+  /* ===== ACCENT PRESETS ===== */
+  :root[data-accent="cyan"]{   --accent:#22d3ee; --accent-deep:#0891b2; --accent-2:#a78bfa; --on-accent:#04141a; --glow:rgba(34,211,238,.35); }
+  :root[data-accent="violet"]{ --accent:#a78bfa; --accent-deep:#7c3aed; --accent-2:#22d3ee; --on-accent:#140a24; --glow:rgba(167,139,250,.38); }
+  :root[data-accent="emerald"]{--accent:#34d399; --accent-deep:#059669; --accent-2:#22d3ee; --on-accent:#04140d; --glow:rgba(52,211,153,.35); }
+  :root[data-accent="amber"]{  --accent:#fbbf24; --accent-deep:#d97706; --accent-2:#fb7185; --on-accent:#1c1404; --glow:rgba(251,191,36,.38); }
+  :root[data-accent="rose"]{   --accent:#fb7185; --accent-deep:#e11d48; --accent-2:#a78bfa; --on-accent:#1c0810; --glow:rgba(251,113,133,.38); }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    transition:background .4s ease,color .4s ease;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:54px 54px;
+    opacity:var(--grid-op);
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);
+    transition:opacity .4s ease;
+  }
+  ::selection{background:var(--accent);color:var(--on-accent)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:9px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:var(--nav-bg);
+    border-bottom:1px solid transparent;transition:border-color .3s,background .4s;
+  }
+  nav.scrolled{border-bottom:1px solid var(--line)}
+  .nav-in{max-width:1120px;margin:0 auto;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .brand{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;letter-spacing:.04em;white-space:nowrap}
+  .brand b{color:var(--accent)}
+  .nav-links{display:flex;gap:28px;font-family:'JetBrains Mono',monospace;font-size:.8rem}
+  .nav-links a{color:var(--txt-dim);transition:color .2s;position:relative}
+  .nav-links a:hover{color:var(--txt)}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--accent);transition:width .25s}
+  .nav-links a:hover::after{width:100%}
+  @media(max-width:900px){.nav-links{display:none}}
+
+  /* ===== CONTROL CLUSTER ===== */
+  .controls{display:flex;align-items:center;gap:10px}
+  .swatches{display:flex;gap:6px;padding:5px 8px;border:1px solid var(--line-bright);border-radius:100px;background:var(--panel)}
+  .sw{width:15px;height:15px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;position:relative}
+  .sw:hover{transform:scale(1.18)}
+  .sw[aria-pressed="true"]{border-color:var(--txt)}
+  .sw.cyan{background:#22d3ee}.sw.violet{background:#a78bfa}.sw.emerald{background:#34d399}.sw.amber{background:#fbbf24}.sw.rose{background:#fb7185}
+  @media(max-width:560px){.swatches{display:none}}
+  .ctl-btn{
+    font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;
+    height:34px;min-width:34px;padding:0 11px;border-radius:8px;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    background:var(--panel);border:1px solid var(--line-bright);color:var(--txt);
+    transition:border-color .2s,color .2s,background .2s,transform .15s;
+  }
+  .ctl-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+  .ctl-btn svg{width:16px;height:16px}
+  .icon-sun{display:none}.icon-moon{display:block}
+  :root[data-theme="light"] .icon-sun{display:block}
+  :root[data-theme="light"] .icon-moon{display:none}
+
+  /* ===== HERO ===== */
+  header{padding:128px 0 80px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:54px;align-items:center}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+  .status{
+    display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;
+    font-size:.74rem;color:var(--txt-dim);border:1px solid var(--line-bright);
+    padding:6px 13px;border-radius:100px;margin-bottom:26px;background:var(--panel);
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 #34d399;animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.02;letter-spacing:-.02em;margin-bottom:22px;
+  }
+  h1 .accent{
+    background:linear-gradient(120deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .role{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:1.05rem;margin-bottom:20px}
+  .lead{color:var(--txt-dim);font-size:1.06rem;max-width:520px;margin-bottom:32px}
+  .lead b{color:var(--txt);font-weight:600}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    font-family:'JetBrains Mono',monospace;font-size:.84rem;padding:13px 22px;border-radius:8px;
+    display:inline-flex;align-items:center;gap:9px;transition:all .2s;cursor:pointer;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--accent);color:var(--on-accent);font-weight:700}
+  .btn-primary:hover{filter:brightness(1.08);box-shadow:0 0 26px var(--glow);transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line-bright);color:var(--txt)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* hero photo card */
+  .photo-card{
+    position:relative;border:1px solid var(--line-bright);border-radius:16px;overflow:hidden;
+    background:linear-gradient(160deg,var(--panel),var(--bg-2));
+    box-shadow:var(--shadow);
+  }
+  .photo-card .barbar{display:flex;gap:6px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--bg-2);align-items:center}
+  .photo-card .barbar span{width:10px;height:10px;border-radius:50%;background:var(--line-bright)}
+  .photo-card .barbar span:nth-child(1){background:#ff5f57}
+  .photo-card .barbar span:nth-child(2){background:#febc2e}
+  .photo-card .barbar span:nth-child(3){background:#28c840}
+  .photo-card .barbar .bar-file{margin-left:8px;font-style:normal;font-size:.7rem;color:var(--txt-faint)}
+  .photo-wrap{aspect-ratio:1/1;position:relative;overflow:hidden;background:radial-gradient(circle at 32% 26%,var(--panel-2),var(--bg-2))}
+  .monogram{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden}
+  .monogram .mono-grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:34px 34px;opacity:.5;mask-image:radial-gradient(circle at 50% 45%,#000,transparent 72%)}
+  .monogram::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);filter:blur(8px)}
+  .mono-init{position:relative;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(4.4rem,11vw,7rem);line-height:1;letter-spacing:-.04em;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:transform .5s ease}
+  .photo-card:hover .mono-init{transform:scale(1.05) rotate(-2deg)}
+  .mono-sub{position:relative;font-size:.74rem;color:var(--txt-dim);letter-spacing:.06em}
+  .photo-meta{padding:14px 16px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--txt-dim);display:flex;justify-content:space-between}
+  .photo-meta b{color:#34d399}
+
+  /* ===== METRIC STRIP ===== */
+  .metrics{
+    margin-top:72px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);
+  }
+  @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}}
+  .metric{padding:26px 24px;border-right:1px solid var(--line)}
+  .metric:last-child{border-right:none}
+  @media(max-width:760px){.metric:nth-child(2){border-right:none}.metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--line)}}
+  .metric .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.1rem;letter-spacing:-.02em}
+  .metric .num span{color:var(--accent)}
+  .metric .lbl{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt-dim);margin-top:4px;letter-spacing:.04em}
+
+  /* ===== SECTIONS ===== */
+  section{padding:96px 0;position:relative}
+  .sec-head{margin-bottom:48px;max-width:680px}
+  .sec-head h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.9rem,4vw,2.7rem);letter-spacing:-.02em;margin:16px 0 14px;line-height:1.1}
+  .sec-head p{color:var(--txt-dim);font-size:1.02rem}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start}
+  @media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:36px}}
+  .about-text p{color:var(--txt-dim);font-size:1.05rem;margin-bottom:18px}
+  .about-text b{color:var(--txt);font-weight:600}
+  .about-text .hl{color:var(--accent);font-weight:600}
+  .id-card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:6px}
+  .id-card .row{display:flex;justify-content:space-between;gap:14px;padding:15px 18px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.82rem}
+  .id-card .row:last-child{border-bottom:none}
+  .id-card .k{color:var(--txt-faint)}
+  .id-card .v{color:var(--txt);text-align:right}
+  .id-card .v.cyan{color:var(--accent)}
+
+  /* ===== SKILLS ===== */
+  .skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:760px){.skill-grid{grid-template-columns:1fr}}
+  .skill-cat{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:24px;transition:border-color .25s,transform .25s}
+  .skill-cat:hover{border-color:var(--line-bright);transform:translateY(-3px)}
+  .skill-cat h3{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .skill-cat h3::before{content:"▸";color:var(--accent-2)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:6px 11px;border-radius:6px;background:var(--bg-2);border:1px solid var(--line);color:var(--txt-dim);transition:all .2s}
+  .tag:hover{color:var(--accent);border-color:var(--accent)}
+
+  /* ===== ARCHITECTURE ===== */
+  .arch-feature{border:1px solid var(--line-bright);border-radius:18px;background:linear-gradient(165deg,var(--panel),var(--bg-2));padding:42px;position:relative;overflow:hidden}
+  .arch-feature::before{content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;background:radial-gradient(circle,var(--glow),transparent 65%);pointer-events:none}
+  .arch-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:14px;display:block}
+  .arch-feature h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:14px;letter-spacing:-.01em}
+  .arch-feature .desc{color:var(--txt-dim);max-width:640px;margin-bottom:38px}
+  .arch-feature .desc b{color:var(--txt)}
+  .pipe{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:stretch;margin-top:8px}
+  @media(max-width:760px){.pipe{grid-template-columns:1fr;gap:0}}
+  .stage{border:1px solid var(--line-bright);border-radius:12px;background:var(--bg-2);padding:22px 20px;text-align:center;position:relative}
+  .stage .st-ic{font-size:1.6rem;margin-bottom:10px}
+  .stage .st-t{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.92rem;margin-bottom:6px}
+  .stage .st-s{font-size:.8rem;color:var(--txt-faint);font-family:'JetBrains Mono',monospace}
+  .stage.src{border-style:dashed}
+  .stage .multi{position:absolute;inset:0;border:1px solid var(--line);border-radius:12px;transform:translate(6px,6px);z-index:-1;opacity:.5}
+  .stage .multi2{position:absolute;inset:0;border:1px solid var(--line);border-radius:12px;transform:translate(12px,12px);z-index:-2;opacity:.25}
+  .flow{display:flex;align-items:center;justify-content:center;padding:0 6px;color:var(--accent);font-size:1.4rem}
+  @media(max-width:760px){.flow{transform:rotate(90deg);padding:14px 0}}
+  .flow .line-anim{position:relative;width:34px;height:2px;background:var(--line-bright);overflow:hidden;border-radius:2px}
+  .flow .line-anim::after{content:"";position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--accent));animation:dash 1.8s linear infinite}
+  @keyframes dash{to{left:120%}}
+  .arch-points{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:38px}
+  @media(max-width:760px){.arch-points{grid-template-columns:1fr}}
+  .ap{display:flex;gap:12px;align-items:flex-start;font-size:.92rem;color:var(--txt-dim)}
+  .ap .apn{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.78rem;flex-shrink:0;margin-top:2px}
+  .ap b{color:var(--txt);font-weight:600}
+
+  /* ===== DASHBOARD GALLERY ===== */
+  .dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  @media(max-width:760px){.dash-grid{grid-template-columns:1fr}}
+  .dash{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);transition:border-color .25s,transform .25s,box-shadow .25s;cursor:zoom-in}
+  .dash:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 18px 40px -24px var(--glow)}
+  .dash .dash-top{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.78rem}
+  .dash .dash-top .tt{color:var(--txt);font-weight:500}
+  .dash .dash-top .badge{color:var(--accent);font-size:.7rem;border:1px solid var(--line-bright);padding:3px 8px;border-radius:5px}
+  .dash img{width:100%;display:block;background:#fff}
+  .dash .dash-cap{padding:14px 16px;color:var(--txt-dim);font-size:.86rem;border-top:1px solid var(--line)}
+  .dash .dash-cap b{color:var(--accent)}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;z-index:200;background:rgba(4,7,11,.94);display:none;align-items:center;justify-content:center;padding:40px;cursor:zoom-out;backdrop-filter:blur(6px)}
+  .lb.open{display:flex}
+  .lb img{max-width:100%;max-height:100%;border-radius:10px;border:1px solid var(--line-bright);box-shadow:0 0 80px rgba(0,0,0,.7)}
+
+  /* ===== PROJECTS ===== */
+  .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:760px){.proj-grid{grid-template-columns:1fr}}
+  .proj{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:26px;transition:all .25s;position:relative;overflow:hidden}
+  .proj:hover{border-color:var(--line-bright);transform:translateY(-3px)}
+  .proj .pj-ic{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--accent-2);letter-spacing:.1em;margin-bottom:14px}
+  .proj h3{font-family:'Space Grotesk',sans-serif;font-size:1.18rem;font-weight:600;margin-bottom:10px}
+  .proj p{color:var(--txt-dim);font-size:.92rem;margin-bottom:16px}
+  .proj .pj-stack{display:flex;flex-wrap:wrap;gap:7px}
+  .proj .pj-stack span{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt-faint);background:var(--bg-2);border:1px solid var(--line);padding:4px 9px;border-radius:5px}
+
+  /* ===== TIMELINE ===== */
+  .timeline{position:relative;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--line-bright)}
+  .tl-item{position:relative;padding-bottom:38px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-27px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+  .tl-item.dim::before{border-color:var(--txt-faint)}
+  .tl-when{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--accent);margin-bottom:5px}
+  .tl-item.dim .tl-when{color:var(--txt-faint)}
+  .tl-role{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem}
+  .tl-org{color:var(--txt-dim);font-size:.92rem;margin-bottom:9px}
+  .tl-desc{color:var(--txt-faint);font-size:.9rem}
+
+  /* ===== CONTACT ===== */
+  .contact{border:1px solid var(--line-bright);border-radius:18px;background:linear-gradient(165deg,var(--panel),var(--bg-2));padding:54px 42px;text-align:center;position:relative;overflow:hidden}
+  .contact::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,var(--glow),transparent 60%);pointer-events:none}
+  .contact h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:14px;letter-spacing:-.02em}
+  .contact p{color:var(--txt-dim);max-width:440px;margin:0 auto 32px}
+  .contact-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .contact-dl{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;padding-top:24px;border-top:1px dashed var(--line-bright)}
+  .dl-chip{display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--txt-dim);border:1px solid var(--line);background:var(--bg-2);padding:9px 15px;border-radius:8px;transition:all .2s}
+  .dl-chip span:first-child{color:var(--accent);font-weight:700}
+  .dl-chip:hover{border-color:var(--accent);color:var(--txt);transform:translateY(-2px)}
+
+  /* ===== STAR SCHEMA ===== */
+  .schema{margin-top:30px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--bg-2));padding:38px 30px;position:relative;overflow:hidden}
+  .schema-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 14px;align-items:center;position:relative;z-index:2}
+  @media(max-width:860px){.schema-grid{grid-template-columns:1fr;gap:14px}}
+  .tbl{border:1px solid var(--line-bright);border-radius:11px;background:var(--panel);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+  .tbl:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 16px 36px -22px var(--glow)}
+  .tbl .tbl-h{display:flex;align-items:center;gap:8px;padding:10px 13px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .tbl .tbl-h .ic{font-size:.7rem;color:var(--accent-2)}
+  .tbl.fact .tbl-h{color:var(--on-accent);background:linear-gradient(120deg,var(--accent),var(--accent-deep));border-bottom-color:transparent}
+  .tbl.fact .tbl-h .ic{color:var(--on-accent)}
+  .tbl ul{list-style:none;padding:8px 0}
+  .tbl li{display:flex;justify-content:space-between;gap:10px;padding:5px 13px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt-dim)}
+  .tbl li .ty{color:var(--txt-faint);font-size:.66rem}
+  .tbl li.key{color:var(--accent)}
+  .tbl li.key .ty{color:var(--accent-2)}
+  .tbl.fact li{color:var(--txt)}
+  .tbl-center{display:flex;align-items:center;justify-content:center}
+  .fact-wrap{position:relative}
+  .fact-wrap::before{content:"FACT";position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--accent);background:var(--panel);padding:0 8px;z-index:3}
+  .schema-note{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;position:relative;z-index:2}
+  .schema-note span{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt-dim);border:1px solid var(--line);border-radius:6px;padding:5px 11px;background:var(--bg-2)}
+  .schema-note span b{color:var(--accent)}
+  .schema::after{content:"";position:absolute;top:50%;left:50%;width:60%;height:60%;transform:translate(-50%,-50%);background:radial-gradient(circle,var(--glow),transparent 70%);opacity:.5;pointer-events:none}
+
+  /* ===== WORK SUMMARY ===== */
+  .work-top{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px}
+  @media(max-width:760px){.work-top{grid-template-columns:repeat(2,1fr)}}
+  .wstat{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:20px}
+  .wstat .wn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.9rem;color:var(--accent);letter-spacing:-.02em}
+  .wstat .wl{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--txt-dim);margin-top:4px}
+  .work-cols{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;align-items:start}
+  @media(max-width:860px){.work-cols{grid-template-columns:1fr}}
+  .bars{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:26px}
+  .bars h3,.donut-card h3{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+  .bar-row{margin-bottom:15px}
+  .bar-row:last-child{margin-bottom:0}
+  .bar-row .bl{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.78rem;margin-bottom:6px}
+  .bar-row .bl .bv{color:var(--accent)}
+  .bar-track{height:9px;border-radius:6px;background:var(--bg-2);overflow:hidden;border:1px solid var(--line)}
+  .bar-fill{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--accent-deep),var(--accent));transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+  .donut-card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:26px;display:flex;flex-direction:column;gap:18px}
+  .donut{width:160px;height:160px;margin:0 auto;border-radius:50%;position:relative;background:conic-gradient(var(--accent) 0 240deg,var(--accent-2) 240deg 360deg)}
+  .donut::after{content:"";position:absolute;inset:20px;border-radius:50%;background:var(--panel)}
+  .donut .dctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+  .donut .dctr b{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700}
+  .donut .dctr small{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--txt-dim)}
+  .legend{display:flex;flex-direction:column;gap:9px}
+  .legend .lg{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--txt-dim)}
+  .legend .lg i{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+  .teams-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .teams-row .tm{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--txt-dim);border:1px solid var(--line);background:var(--bg-2);border-radius:100px;padding:7px 14px}
+  .teams-row .tm b{color:var(--accent)}
+
+  /* ===== FOOTER ===== */
+  footer{border-top:1px solid var(--line);padding:34px 0;margin-top:40px}
+  .foot-in{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--txt-faint);flex-wrap:wrap;gap:12px}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.dot,.flow .line-anim::after{animation:none}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <div class="brand">ali<b>.</b>akbar<span style="color:var(--txt-faint)">_</span></div>
+    <div class="nav-links">
+      <a href="#about" data-i18n="nav.about">about</a>
+      <a href="#skills" data-i18n="nav.skills">skills</a>
+      <a href="#architecture" data-i18n="nav.arch">architecture</a>
+      <a href="#dashboards" data-i18n="nav.dash">dashboards</a>
+      <a href="#work" data-i18n="nav.work">track record</a>
+      <a href="#projects" data-i18n="nav.projects">projects</a>
+      <a href="#contact" data-i18n="nav.contact">contact</a>
+    </div>
+    <div class="controls">
+      <div class="swatches" role="group" aria-label="Accent color">
+        <span class="sw cyan"    data-accent="cyan"    role="button" tabindex="0" aria-label="Cyan"></span>
+        <span class="sw violet"  data-accent="violet"  role="button" tabindex="0" aria-label="Violet"></span>
+        <span class="sw emerald" data-accent="emerald" role="button" tabindex="0" aria-label="Emerald"></span>
+        <span class="sw amber"   data-accent="amber"   role="button" tabindex="0" aria-label="Amber"></span>
+        <span class="sw rose"    data-accent="rose"    role="button" tabindex="0" aria-label="Rose"></span>
+      </div>
+      <button class="ctl-btn" id="langBtn" aria-label="Switch language">EN</button>
+      <button class="ctl-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="status"><span class="dot"></span> <span data-i18n="hero.status">Data Analyst · Available for opportunities</span></div>
+        <h1 data-i18n-html="hero.title">Mengubah data mentah jadi <span class="accent">keputusan</span> yang bisa ditindaklanjuti.</h1>
+        <div class="role mono">// Muhammad Ali Akbar Al-Qahri</div>
+        <p class="lead" data-i18n-html="hero.lead">Data Science graduate yang membangun <b>pipeline end-to-end</b> — dari banyak database terpisah, disatukan lewat <b>star schema</b>, hingga <b>dashboard Power BI</b> yang terhubung langsung ke MySQL.</p>
+        <div class="cta-row">
+          <a href="#architecture" class="btn btn-primary" data-i18n="hero.cta1">▸ Lihat arsitektur dashboard</a>
+          <a href="Muhammad_Ali_Akbar_Al-Qahri_Resume.pdf" download class="btn btn-ghost" data-i18n="hero.cta3">↓ Download CV</a>
+          <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Hubungi saya</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="photo-card">
+          <div class="barbar"><span></span><span></span><span></span><em class="bar-file mono">profile.sql</em></div>
+          <div class="photo-wrap">
+            <div class="monogram" aria-label="Muhammad Ali Akbar Al-Qahri">
+              <span class="mono-init">AA</span>
+              <span class="mono-sub mono">M. Ali Akbar Al-Qahri</span>
+              <span class="mono-grid"></span>
+            </div>
+          </div>
+          <div class="photo-meta"><span>role</span><b>● Data Analyst</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics reveal">
+      <div class="metric"><div class="num"><span>120</span></div><div class="lbl" data-i18n="metric.tasks">TASK SELESAI</div></div>
+      <div class="metric"><div class="num">3.74<span>/4</span></div><div class="lbl" data-i18n="metric.gpa">IPK DATA SCIENCE</div></div>
+      <div class="metric"><div class="num"><span>4</span></div><div class="lbl" data-i18n="metric.dash">DASHBOARD POWER BI</div></div>
+      <div class="metric"><div class="num"><span>5</span>+</div><div class="lbl" data-i18n="metric.plat">PLATFORM DATA</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="eyebrow" data-i18n="about.eyebrow">01 — About</span>
+        <h2 style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(1.9rem,4vw,2.7rem);letter-spacing:-.02em;margin:16px 0 22px;line-height:1.1" data-i18n="about.h2">Data analyst dengan kecenderungan engineering.</h2>
+        <p data-i18n-html="about.p1">Saya lulusan <b>Data Science Telkom University</b> (IPK 3.74) yang fokus mengubah dataset kompleks menjadi <span class="hl">dashboard interaktif</span> dan narasi strategis.</p>
+        <p data-i18n-html="about.p2">Track record saya mencakup membangun <b>data pipeline end-to-end</b> dan mengotomasi proses bisnis manual dengan Python dan AI. Saya nyaman bekerja dari lapisan database (SQL, star schema, MySQL) sampai lapisan presentasi (Power BI, Streamlit) — sehingga insight yang dihasilkan benar-benar bisa dipakai mengambil keputusan.</p>
+        <p data-i18n-html="about.p3">Saat ini saya menjalani <b>Magang Hub Batch 2</b> sebagai Data Analyst di PT Cerebrum Edukanesia Nusantara, mengerjakan kebutuhan data lintas tim Management, Marketing, Produk, IT, dan VOC.</p>
+      </div>
+      <div class="id-card reveal">
+        <div class="row"><span class="k">name</span><span class="v">M. Ali Akbar Al-Qahri</span></div>
+        <div class="row"><span class="k">role</span><span class="v cyan">Data Analyst</span></div>
+        <div class="row"><span class="k">edu</span><span class="v">Data Science, Telkom Univ</span></div>
+        <div class="row"><span class="k">gpa</span><span class="v">3.74 / 4.00</span></div>
+        <div class="row"><span class="k">base</span><span class="v">Bandung, ID</span></div>
+        <div class="row"><span class="k">focus</span><span class="v">SQL · Power BI · Python</span></div>
+        <div class="row"><span class="k">lang</span><span class="v">ID (native) · EN (pro)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="skills.eyebrow">02 — Stack</span>
+      <h2 data-i18n="skills.h2">Technical skills</h2>
+      <p data-i18n="skills.p">Tools yang saya pakai di seluruh siklus data — dari ekstraksi hingga storytelling.</p>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-cat reveal">
+        <h3 data-i18n="skills.c1">Data Analysis & BI</h3>
+        <div class="tags">
+          <span class="tag">Power BI</span><span class="tag">SQL</span><span class="tag">Python</span>
+          <span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Looker Studio</span>
+          <span class="tag">Tableau</span><span class="tag">Excel</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3 data-i18n="skills.c2">Database & Modeling</h3>
+        <div class="tags">
+          <span class="tag">MySQL</span><span class="tag">Star Schema</span><span class="tag">Data Warehouse</span>
+          <span class="tag">Data Modeling</span><span class="tag">ETL</span><span class="tag">Data Cleaning</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3 data-i18n="skills.c3">Machine Learning</h3>
+        <div class="tags">
+          <span class="tag">scikit-learn</span><span class="tag">Random Forest</span><span class="tag">XGBoost</span>
+          <span class="tag">SVM</span><span class="tag">Time Series</span><span class="tag">Feature Engineering</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3 data-i18n="skills.c4">AI & Automation</h3>
+        <div class="tags">
+          <span class="tag">Streamlit</span><span class="tag">API Integration</span><span class="tag">Google Gemini AI</span>
+          <span class="tag">NLP</span><span class="tag">Web Scraping</span><span class="tag">Telegram Bot</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="arch.eyebrow">03 — Featured</span>
+      <h2 data-i18n="arch.h2">End-to-end dashboard architecture</h2>
+      <p data-i18n="arch.p">Proyek inti saya di Cerebrum: menyatukan data yang tersebar di banyak database menjadi satu sumber kebenaran, lalu menyajikannya secara real-time.</p>
+    </div>
+
+    <div class="arch-feature reveal">
+      <span class="arch-tag">Signature project · PT Cerebrum Edukanesia Nusantara</span>
+      <h3 data-i18n="arch.title">Dari banyak database → satu model → satu dashboard.</h3>
+      <p class="desc" data-i18n-html="arch.desc">Saya membangun pipeline yang mengambil data dari <b>berbagai database internal yang terpisah</b>, menyatukannya ke dalam satu <b>star schema</b> (tabel fakta + dimensi), lalu menghubungkan <b>Power BI langsung ke MySQL</b> agar dashboard selalu mencerminkan data terbaru.</p>
+
+      <div class="pipe">
+        <div class="stage src">
+          <div class="multi2"></div><div class="multi"></div>
+          <div class="st-ic">🗄️</div>
+          <div class="st-t">Multi-Database</div>
+          <div class="st-s" data-i18n="arch.s1">sumber terpisah</div>
+        </div>
+        <div class="flow"><div class="line-anim"></div></div>
+        <div class="stage">
+          <div class="st-ic">✦</div>
+          <div class="st-t">Star Schema</div>
+          <div class="st-s">fact + dimension</div>
+        </div>
+        <div class="flow"><div class="line-anim"></div></div>
+        <div class="stage">
+          <div class="st-ic">📊</div>
+          <div class="st-t">Power BI ↔ MySQL</div>
+          <div class="st-s">live connection</div>
+        </div>
+      </div>
+
+      <div class="arch-points">
+        <div class="ap"><span class="apn">[01]</span><div data-i18n-html="arch.ap1"><b>Extract & integrate.</b> Tarik data mentah dari beberapa MySQL database, jaga integritas saat digabung.</div></div>
+        <div class="ap"><span class="apn">[02]</span><div data-i18n-html="arch.ap2"><b>Star schema modeling.</b> Rancang tabel fakta & dimensi agar query cepat dan relasi bersih.</div></div>
+        <div class="ap"><span class="apn">[03]</span><div data-i18n-html="arch.ap3"><b>Live Power BI.</b> Hubungkan Power BI ke MySQL — dashboard update tanpa ekspor manual.</div></div>
+        <div class="ap"><span class="apn">[04]</span><div data-i18n-html="arch.ap4"><b>Decision-ready.</b> KPI revenue, user, dan paket siap dipakai untuk keputusan strategis.</div></div>
+      </div>
+    </div>
+
+    <div class="schema reveal">
+      <span class="arch-tag" data-i18n="schema.tag">Data model · Star schema (fact + dimension)</span>
+      <h3 style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(1.3rem,2.6vw,1.7rem);margin:6px 0 6px" data-i18n="schema.h">Satu Fact, dikelilingi Dimension.</h3>
+      <p class="desc" style="color:var(--txt-dim);max-width:640px;margin-bottom:30px" data-i18n="schema.p">Data dari banyak database (jadiASN, jadiBUMN, jadiOJK, jadiSekdin, dll.) di-ETL ke satu data warehouse "AllinMain". Tabel fakta menyimpan transaksi & aktivitas terukur; tabel dimensi memberi konteks. Relasi bersih ini bikin Power BI cepat di-query dan mudah dikembangkan.</p>
+
+      <div class="schema-grid">
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimDate</div><ul><li class="key">date_key <span class="ty">PK</span></li><li>full_date <span class="ty">date</span></li><li>month <span class="ty">int</span></li><li>quarter <span class="ty">int</span></li></ul></div>
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimUser</div><ul><li class="key">user_key <span class="ty">PK</span></li><li>source_app <span class="ty">varchar</span></li><li>register_date <span class="ty">date</span></li><li>tier <span class="ty">varchar</span></li></ul></div>
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimPackage</div><ul><li class="key">package_key <span class="ty">PK</span></li><li>package_name <span class="ty">varchar</span></li><li>price <span class="ty">decimal</span></li><li>journey <span class="ty">varchar</span></li></ul></div>
+
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimPaymentMethod</div><ul><li class="key">payment_key <span class="ty">PK</span></li><li>method <span class="ty">varchar</span></li><li>provider <span class="ty">varchar</span></li></ul></div>
+        <div class="tbl-center"><div class="fact-wrap"><div class="tbl fact"><div class="tbl-h"><span class="ic">★</span> FactSales</div><ul><li class="key">sales_id <span class="ty">PK</span></li><li class="key">date_key <span class="ty">FK</span></li><li class="key">user_key <span class="ty">FK</span></li><li class="key">package_key <span class="ty">FK</span></li><li class="key">payment_key <span class="ty">FK</span></li><li>revenue <span class="ty">decimal</span></li><li>qty <span class="ty">int</span></li><li>discount <span class="ty">decimal</span></li></ul></div></div></div>
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimFeature</div><ul><li class="key">feature_key <span class="ty">PK</span></li><li>feature_name <span class="ty">varchar</span></li><li>type <span class="ty">varchar</span></li></ul></div>
+
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimPlatform</div><ul><li class="key">platform_key <span class="ty">PK</span></li><li>platform <span class="ty">varchar</span></li><li>category <span class="ty">varchar</span></li></ul></div>
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimQuestion</div><ul><li class="key">question_key <span class="ty">PK</span></li><li>category <span class="ty">varchar</span></li><li>scoring_type <span class="ty">varchar</span></li></ul></div>
+        <div class="tbl"><div class="tbl-h"><span class="ic">◈</span> DimContent</div><ul><li class="key">content_key <span class="ty">PK</span></li><li>content_name <span class="ty">varchar</span></li><li>type <span class="ty">varchar</span></li></ul></div>
+      </div>
+
+      <div class="schema-note">
+        <span data-i18n="schema.n1"><b>10+</b> tabel dimensi</span>
+        <span data-i18n="schema.n2"><b>2</b> tabel fakta · Sales & Activity</span>
+        <span data-i18n="schema.n3"><b>source_app</b> sebagai pembeda platform</span>
+        <span data-i18n="schema.n4"><b>Bridge</b> table untuk relasi many-to-many</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dashboards" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="dash.eyebrow">04 — Output</span>
+      <h2 data-i18n="dash.h2">Dashboard showcase</h2>
+      <p data-i18n="dash.p">Empat dashboard Power BI produksi yang dibangun di atas arsitektur tersebut. Klik untuk memperbesar.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash reveal" data-full="dashboard-revenue.png">
+        <div class="dash-top"><span class="tt">Revenue & Transactions</span><span class="badge">JadiOJK</span></div>
+        <img src="dashboard-revenue.png" alt="Dashboard Revenue & Transactions" loading="lazy">
+        <div class="dash-cap" data-i18n-html="dash.cap1">Net Revenue <b>24.68bn</b> · 199.76K user · 2.68bn transaksi — breakdown metode bayar & provider.</div>
+      </div>
+      <div class="dash reveal" data-full="dashboard-user.png">
+        <div class="dash-top"><span class="tt">User & Performance</span><span class="badge">Analytics</span></div>
+        <img src="dashboard-user.png" alt="Dashboard User & Performance" loading="lazy">
+        <div class="dash-cap" data-i18n-html="dash.cap2">914.48K total user · conversion rate <b>17.6%</b> — segmentasi platform, demografi & sales.</div>
+      </div>
+      <div class="dash reveal" data-full="dashboard-package.png">
+        <div class="dash-top"><span class="tt">Package Pricing</span><span class="badge">jadiBUMN</span></div>
+        <img src="dashboard-package.png" alt="Dashboard Package Pricing" loading="lazy">
+        <div class="dash-cap" data-i18n="dash.cap3">Analisis harga & diskon paket per price-segment — avg price, discount rate, ARPU.</div>
+      </div>
+      <div class="dash reveal" data-full="dashboard-activity.png">
+        <div class="dash-top"><span class="tt">Content Activity</span><span class="badge">All Platforms</span></div>
+        <img src="dashboard-activity.png" alt="Dashboard Content Activity" loading="lazy">
+        <div class="dash-cap" data-i18n="dash.cap4">Aktivitas Tryout · Latsol · Course · Liveclass · Journey lintas platform & konten.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="work.eyebrow">05 — Track record</span>
+      <h2 data-i18n="work.h2">Rekap pekerjaan magang</h2>
+      <p data-i18n="work.p">Ringkasan nyata dari tracker internal: 120 pekerjaan selama Februari–Juni 2026 untuk lintas divisi di Cerebrum.</p>
+    </div>
+
+    <div class="work-top reveal">
+      <div class="wstat"><div class="wn">120</div><div class="wl" data-i18n="work.s1">TASK SELESAI</div></div>
+      <div class="wstat"><div class="wn">7</div><div class="wl" data-i18n="work.s2">DIVISI DILAYANI</div></div>
+      <div class="wstat"><div class="wn">5</div><div class="wl" data-i18n="work.s3">BULAN AKTIF</div></div>
+      <div class="wstat"><div class="wn">72</div><div class="wl" data-i18n="work.s4">DELIVERABLE TERLINK</div></div>
+    </div>
+
+    <div class="work-cols">
+      <div class="bars reveal">
+        <h3 data-i18n="work.bh">Jenis pekerjaan</h3>
+        <div class="bar-row"><div class="bl"><span>Data wrangling</span><span class="bv">36</span></div><div class="bar-track"><div class="bar-fill" data-w="100"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>SQL / Query</span><span class="bv">34</span></div><div class="bar-track"><div class="bar-fill" data-w="94"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Dashboard / Power BI</span><span class="bv">31</span></div><div class="bar-track"><div class="bar-fill" data-w="86"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Laporan / Analisa</span><span class="bv">18</span></div><div class="bar-track"><div class="bar-fill" data-w="50"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Web Scraping</span><span class="bv">15</span></div><div class="bar-track"><div class="bar-fill" data-w="42"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Streamlit app</span><span class="bv">14</span></div><div class="bar-track"><div class="bar-fill" data-w="39"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Python automation</span><span class="bv">7</span></div><div class="bar-track"><div class="bar-fill" data-w="19"></div></div></div>
+        <div class="bar-row"><div class="bl"><span>Presentasi / PPT</span><span class="bv">3</span></div><div class="bar-track"><div class="bar-fill" data-w="8"></div></div></div>
+      </div>
+
+      <div class="donut-card reveal">
+        <h3 data-i18n="work.dh">Sumber permintaan</h3>
+        <div class="donut"><div class="dctr"><b>120</b><small data-i18n="work.dctr">total task</small></div></div>
+        <div class="legend">
+          <div class="lg"><i style="background:var(--accent)"></i> <span data-i18n="work.lg1">Request antar-tim — 80</span></div>
+          <div class="lg"><i style="background:var(--accent-2)"></i> <span data-i18n="work.lg2">Main (rutin terjadwal) — 40</span></div>
+        </div>
+        <div class="teams-row">
+          <span class="tm">Produk <b>62</b></span>
+          <span class="tm">Marketing <b>30</b></span>
+          <span class="tm">Management <b>24</b></span>
+          <span class="tm">IT <b>22</b></span>
+          <span class="tm">VOC <b>3</b></span>
+          <span class="tm">CIDS <b>3</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="proj.eyebrow">06 — Work</span>
+      <h2 data-i18n="proj.h2">Projects & impact</h2>
+      <p data-i18n="proj.p">Aplikasi, otomasi, dan analisis bisnis lain yang saya kerjakan.</p>
+    </div>
+    <div class="proj-grid">
+      <div class="proj reveal">
+        <div class="pj-ic">// streamlit app</div>
+        <h3>Cerezoom Analyst</h3>
+        <p data-i18n="proj.1">Aplikasi analisis data Zoom untuk memantau liveclass — dibangun dengan Python & Streamlit, di-deploy live.</p>
+        <div class="pj-stack"><span>Python</span><span>Streamlit</span><span>Data Analysis</span></div>
+      </div>
+      <div class="proj reveal">
+        <div class="pj-ic">// pricing tool</div>
+        <h3>Cerepackage</h3>
+        <p data-i18n="proj.2">Dashboard analisis & optimasi harga paket produk, membantu tim marketing menentukan strategi pricing.</p>
+        <div class="pj-stack"><span>Python</span><span>Streamlit</span><span>SQL</span></div>
+      </div>
+      <div class="proj reveal">
+        <div class="pj-ic">// quality control</div>
+        <h3>Dashboard Soal Duplikat</h3>
+        <p data-i18n="proj.3">Sistem QC untuk mendeteksi soal duplikat (ASN, BUMN, Cerebrum) — SQL + Streamlit untuk menjaga kualitas konten.</p>
+        <div class="pj-stack"><span>SQL</span><span>Streamlit</span><span>QC</span></div>
+      </div>
+      <div class="proj reveal">
+        <div class="pj-ic">// automation</div>
+        <h3>Report Generator</h3>
+        <p data-i18n="proj.4">Program otomasi pembuatan laporan, memangkas proses manual penyusunan laporan berulang.</p>
+        <div class="pj-stack"><span>Python</span><span>Streamlit</span><span>Automation</span></div>
+      </div>
+      <div class="proj reveal">
+        <div class="pj-ic">// business analysis</div>
+        <h3>Competitor & Forecast</h3>
+        <p data-i18n="proj.5">Analisa harga premium 5 kompetitor, prediksi estimasi user 2026 seluruh platform, dan analisis penyebab penurunan performa Cerebrum.</p>
+        <div class="pj-stack"><span>SQL</span><span>Forecasting</span><span>Strategy</span></div>
+      </div>
+      <div class="proj reveal">
+        <div class="pj-ic">// data engineering</div>
+        <h3>Data Warehouse AllinMain</h3>
+        <p data-i18n="proj.6">Konsolidasi data lintas platform ke satu warehouse, plus mapping package–journey & variabel penghubung dimensi.</p>
+        <div class="pj-stack"><span>MySQL</span><span>Star Schema</span><span>ETL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="exp.eyebrow">07 — Path</span>
+      <h2 data-i18n="exp.h2">Experience</h2>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-when" data-i18n="exp.t1.when">Nov 2025 — Sekarang</div>
+        <div class="tl-role">Data Analyst</div>
+        <div class="tl-org">PT Cerebrum Edukanesia Nusantara · Bandung</div>
+        <div class="tl-desc" data-i18n="exp.t1.desc">Pipeline data end-to-end dari MySQL, transformasi & cleaning, serta dashboard Power BI interaktif untuk keputusan strategis.</div>
+      </div>
+      <div class="tl-item dim">
+        <div class="tl-when">Jun 2025 — Nov 2025</div>
+        <div class="tl-role" data-i18n="exp.t2.role">Database Engineer (Freelance)</div>
+        <div class="tl-org">Garda Abdi Negara · Remote</div>
+        <div class="tl-desc" data-i18n="exp.t2.desc">Solusi AI berbasis Google Gemini API (akurasi 92%); otomasi konversi 10K+ soal untuk 200+ user, hemat waktu proses 75%.</div>
+      </div>
+      <div class="tl-item dim">
+        <div class="tl-when">Feb 2024 — Jun 2025</div>
+        <div class="tl-role">Data Science Teaching Assistant</div>
+        <div class="tl-org">Telkom University · Bandung</div>
+        <div class="tl-desc" data-i18n="exp.t3.desc">Workshop Python & SQL meningkatkan performa mahasiswa 30%; mengevaluasi 500+ tugas.</div>
+      </div>
+      <div class="tl-item dim">
+        <div class="tl-when">Jul 2024 — Okt 2024</div>
+        <div class="tl-role" data-i18n="exp.t4.role">Data Analyst Intern</div>
+        <div class="tl-org">Bank Indonesia · KPw Sulawesi Selatan · Makassar</div>
+        <div class="tl-desc" data-i18n="exp.t4.desc">8 dashboard strategis (kepuasan stakeholder 85%); otomasi Power BI memangkas waktu reporting 40% di 5 cabang.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <h2 data-i18n="contact.h2">Mari bicara data.</h2>
+      <p data-i18n="contact.p">Terbuka untuk peran Data Analyst, kolaborasi, atau sekadar bertukar pikiran soal dashboard & pipeline.</p>
+      <div class="contact-links">
+        <a href="mailto:akbaralqahri@gmail.com" class="btn btn-primary">✉ akbaralqahri@gmail.com</a>
+        <a href="https://linkedin.com/in/akbaralqahri" target="_blank" rel="noopener" class="btn btn-ghost">in/ LinkedIn</a>
+        <a href="tel:+6285211944977" class="btn btn-ghost">☏ 085-211-944-977</a>
+      </div>
+      <div class="contact-dl">
+        <a href="Muhammad_Ali_Akbar_Al-Qahri_Resume.pdf" download class="dl-chip"><span>↓</span> <span data-i18n="contact.dl1">Resume / CV (PDF)</span></a>
+        <a href="Tracker DB.xlsx" download class="dl-chip"><span>↓</span> <span data-i18n="contact.dl2">Tracker pekerjaan magang (XLSX)</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <span>© 2026 Muhammad Ali Akbar Al-Qahri</span>
+      <span data-i18n="footer.built">built with data · SQL · Power BI · Python</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lb" id="lb"><img src="" alt="dashboard full view" id="lb-img"></div>
+
+<script>
+  /* ===== i18n DICTIONARY ===== */
+  const I18N={
+    id:{
+      "nav.about":"tentang","nav.skills":"keahlian","nav.arch":"arsitektur","nav.dash":"dashboard","nav.work":"rekap kerja","nav.projects":"proyek","nav.contact":"kontak",
+      "hero.status":"Data Analyst · Terbuka untuk peluang baru",
+      "hero.title":"Mengubah data mentah jadi <span class=\"accent\">keputusan</span> yang bisa ditindaklanjuti.",
+      "hero.lead":"Lulusan Data Science yang membangun <b>pipeline end-to-end</b> — dari banyak database terpisah, disatukan lewat <b>star schema</b>, hingga <b>dashboard Power BI</b> yang terhubung langsung ke MySQL.",
+      "hero.cta1":"▸ Lihat arsitektur dashboard","hero.cta2":"Hubungi saya","hero.cta3":"↓ Download CV",
+      "schema.tag":"Model data · Star schema (fakta + dimensi)","schema.h":"Satu Fact, dikelilingi Dimension.",
+      "schema.p":"Data dari banyak database (jadiASN, jadiBUMN, jadiOJK, jadiSekdin, dll.) di-ETL ke satu data warehouse \"AllinMain\". Tabel fakta menyimpan transaksi & aktivitas terukur; tabel dimensi memberi konteks. Relasi bersih ini bikin Power BI cepat di-query dan mudah dikembangkan.",
+      "schema.n1":"<b>10+</b> tabel dimensi","schema.n2":"<b>2</b> tabel fakta · Sales & Activity","schema.n3":"<b>source_app</b> sebagai pembeda platform","schema.n4":"<b>Bridge</b> table untuk relasi many-to-many",
+      "work.eyebrow":"05 — Rekam jejak","work.h2":"Rekap pekerjaan magang","work.p":"Ringkasan nyata dari tracker internal: 120 pekerjaan selama Februari–Juni 2026 untuk lintas divisi di Cerebrum.",
+      "work.s1":"TASK SELESAI","work.s2":"DIVISI DILAYANI","work.s3":"BULAN AKTIF","work.s4":"DELIVERABLE TERLINK",
+      "work.bh":"Jenis pekerjaan","work.dh":"Sumber permintaan","work.dctr":"total task",
+      "work.lg1":"Request antar-tim — 80","work.lg2":"Main (rutin terjadwal) — 40",
+      "metric.tasks":"TASK SELESAI","metric.gpa":"IPK DATA SCIENCE","metric.dash":"DASHBOARD POWER BI","metric.plat":"PLATFORM DATA",
+      "about.eyebrow":"01 — Tentang","about.h2":"Data analyst dengan kecenderungan engineering.",
+      "about.p1":"Saya lulusan <b>Data Science Telkom University</b> (IPK 3.74) yang fokus mengubah dataset kompleks menjadi <span class=\"hl\">dashboard interaktif</span> dan narasi strategis.",
+      "about.p2":"Track record saya mencakup membangun <b>data pipeline end-to-end</b> dan mengotomasi proses bisnis manual dengan Python dan AI. Saya nyaman bekerja dari lapisan database (SQL, star schema, MySQL) sampai lapisan presentasi (Power BI, Streamlit) — sehingga insight yang dihasilkan benar-benar bisa dipakai mengambil keputusan.",
+      "about.p3":"Saat ini saya menjalani <b>Magang Hub Batch 2</b> sebagai Data Analyst di PT Cerebrum Edukanesia Nusantara, mengerjakan kebutuhan data lintas tim Management, Marketing, Produk, IT, dan VOC.",
+      "skills.eyebrow":"02 — Stack","skills.h2":"Keahlian teknis","skills.p":"Tools yang saya pakai di seluruh siklus data — dari ekstraksi hingga storytelling.",
+      "skills.c1":"Analisis Data & BI","skills.c2":"Database & Modeling","skills.c3":"Machine Learning","skills.c4":"AI & Otomasi",
+      "arch.eyebrow":"03 — Unggulan","arch.h2":"Arsitektur dashboard end-to-end","arch.p":"Proyek inti saya di Cerebrum: menyatukan data yang tersebar di banyak database menjadi satu sumber kebenaran, lalu menyajikannya secara real-time.",
+      "arch.title":"Dari banyak database → satu model → satu dashboard.",
+      "arch.desc":"Saya membangun pipeline yang mengambil data dari <b>berbagai database internal yang terpisah</b>, menyatukannya ke dalam satu <b>star schema</b> (tabel fakta + dimensi), lalu menghubungkan <b>Power BI langsung ke MySQL</b> agar dashboard selalu mencerminkan data terbaru.",
+      "arch.s1":"sumber terpisah",
+      "arch.ap1":"<b>Ekstrak & integrasi.</b> Tarik data mentah dari beberapa MySQL database, jaga integritas saat digabung.",
+      "arch.ap2":"<b>Pemodelan star schema.</b> Rancang tabel fakta & dimensi agar query cepat dan relasi bersih.",
+      "arch.ap3":"<b>Power BI live.</b> Hubungkan Power BI ke MySQL — dashboard update tanpa ekspor manual.",
+      "arch.ap4":"<b>Siap untuk keputusan.</b> KPI revenue, user, dan paket siap dipakai untuk keputusan strategis.",
+      "dash.eyebrow":"04 — Output","dash.h2":"Showcase dashboard","dash.p":"Empat dashboard Power BI produksi yang dibangun di atas arsitektur tersebut. Klik untuk memperbesar.",
+      "dash.cap1":"Net Revenue <b>24.68bn</b> · 199.76K user · 2.68bn transaksi — breakdown metode bayar & provider.",
+      "dash.cap2":"914.48K total user · conversion rate <b>17.6%</b> — segmentasi platform, demografi & sales.",
+      "dash.cap3":"Analisis harga & diskon paket per price-segment — avg price, discount rate, ARPU.",
+      "dash.cap4":"Aktivitas Tryout · Latsol · Course · Liveclass · Journey lintas platform & konten.",
+      "proj.eyebrow":"06 — Karya","proj.h2":"Proyek & dampak","proj.p":"Aplikasi, otomasi, dan analisis bisnis lain yang saya kerjakan.",
+      "proj.1":"Aplikasi analisis data Zoom untuk memantau liveclass — dibangun dengan Python & Streamlit, di-deploy live.",
+      "proj.2":"Dashboard analisis & optimasi harga paket produk, membantu tim marketing menentukan strategi pricing.",
+      "proj.3":"Sistem QC untuk mendeteksi soal duplikat (ASN, BUMN, Cerebrum) — SQL + Streamlit untuk menjaga kualitas konten.",
+      "proj.4":"Program otomasi pembuatan laporan, memangkas proses manual penyusunan laporan berulang.",
+      "proj.5":"Analisa harga premium 5 kompetitor, prediksi estimasi user 2026 seluruh platform, dan analisis penyebab penurunan performa Cerebrum.",
+      "proj.6":"Konsolidasi data lintas platform ke satu warehouse, plus mapping package–journey & variabel penghubung dimensi.",
+      "exp.eyebrow":"07 — Perjalanan","exp.h2":"Pengalaman",
+      "exp.t1.when":"Nov 2025 — Sekarang","exp.t1.desc":"Pipeline data end-to-end dari MySQL, transformasi & cleaning, serta dashboard Power BI interaktif untuk keputusan strategis.",
+      "exp.t2.role":"Database Engineer (Freelance)","exp.t2.desc":"Solusi AI berbasis Google Gemini API (akurasi 92%); otomasi konversi 10K+ soal untuk 200+ user, hemat waktu proses 75%.",
+      "exp.t3.desc":"Workshop Python & SQL meningkatkan performa mahasiswa 30%; mengevaluasi 500+ tugas.",
+      "exp.t4.role":"Data Analyst Intern","exp.t4.desc":"8 dashboard strategis (kepuasan stakeholder 85%); otomasi Power BI memangkas waktu reporting 40% di 5 cabang.",
+      "contact.h2":"Mari bicara data.","contact.p":"Terbuka untuk peran Data Analyst, kolaborasi, atau sekadar bertukar pikiran soal dashboard & pipeline.",
+      "contact.dl1":"Resume / CV (PDF)","contact.dl2":"Tracker pekerjaan magang (XLSX)",
+      "footer.built":"dibangun dengan data · SQL · Power BI · Python"
+    },
+    en:{
+      "nav.about":"about","nav.skills":"skills","nav.arch":"architecture","nav.dash":"dashboards","nav.work":"track record","nav.projects":"projects","nav.contact":"contact",
+      "hero.status":"Data Analyst · Available for opportunities",
+      "hero.title":"Turning raw data into <span class=\"accent\">decisions</span> you can act on.",
+      "hero.lead":"Data Science graduate who builds <b>end-to-end pipelines</b> — from many separate databases, unified through a <b>star schema</b>, to <b>Power BI dashboards</b> wired straight into MySQL.",
+      "hero.cta1":"▸ See dashboard architecture","hero.cta2":"Get in touch","hero.cta3":"↓ Download CV",
+      "schema.tag":"Data model · Star schema (fact + dimension)","schema.h":"One Fact, surrounded by Dimensions.",
+      "schema.p":"Data from many databases (jadiASN, jadiBUMN, jadiOJK, jadiSekdin, etc.) is ETL'd into a single \"AllinMain\" data warehouse. Fact tables hold measurable transactions & activity; dimension tables add context. These clean relations keep Power BI fast to query and easy to extend.",
+      "schema.n1":"<b>10+</b> dimension tables","schema.n2":"<b>2</b> fact tables · Sales & Activity","schema.n3":"<b>source_app</b> distinguishes platforms","schema.n4":"<b>Bridge</b> tables for many-to-many",
+      "work.eyebrow":"05 — Track record","work.h2":"Internship work recap","work.p":"Real numbers from the internal tracker: 120 tasks across Feb–Jun 2026 serving teams across Cerebrum.",
+      "work.s1":"TASKS DONE","work.s2":"TEAMS SERVED","work.s3":"ACTIVE MONTHS","work.s4":"LINKED DELIVERABLES",
+      "work.bh":"Type of work","work.dh":"Request source","work.dctr":"total tasks",
+      "work.lg1":"Cross-team request — 80","work.lg2":"Main (scheduled routine) — 40",
+      "metric.tasks":"TASKS COMPLETED","metric.gpa":"DATA SCIENCE GPA","metric.dash":"POWER BI DASHBOARDS","metric.plat":"DATA PLATFORMS",
+      "about.eyebrow":"01 — About","about.h2":"A data analyst with an engineering bent.",
+      "about.p1":"I'm a <b>Data Science graduate from Telkom University</b> (GPA 3.74) focused on turning complex datasets into <span class=\"hl\">interactive dashboards</span> and strategic narratives.",
+      "about.p2":"My track record covers building <b>end-to-end data pipelines</b> and automating manual business processes with Python and AI. I'm comfortable working from the database layer (SQL, star schema, MySQL) up to the presentation layer (Power BI, Streamlit) — so the insights I produce are genuinely decision-ready.",
+      "about.p3":"I'm currently doing <b>Magang Hub Batch 2</b> as a Data Analyst at PT Cerebrum Edukanesia Nusantara, serving data needs across the Management, Marketing, Product, IT, and VOC teams.",
+      "skills.eyebrow":"02 — Stack","skills.h2":"Technical skills","skills.p":"The tools I use across the whole data lifecycle — from extraction to storytelling.",
+      "skills.c1":"Data Analysis & BI","skills.c2":"Database & Modeling","skills.c3":"Machine Learning","skills.c4":"AI & Automation",
+      "arch.eyebrow":"03 — Featured","arch.h2":"End-to-end dashboard architecture","arch.p":"My core project at Cerebrum: unifying data scattered across many databases into one source of truth, then serving it in real time.",
+      "arch.title":"From many databases → one model → one dashboard.",
+      "arch.desc":"I built a pipeline that pulls data from <b>multiple separate internal databases</b>, unifies it into a single <b>star schema</b> (fact + dimension tables), then connects <b>Power BI directly to MySQL</b> so the dashboard always reflects the latest data.",
+      "arch.s1":"separate sources",
+      "arch.ap1":"<b>Extract & integrate.</b> Pull raw data from several MySQL databases, preserving integrity on merge.",
+      "arch.ap2":"<b>Star schema modeling.</b> Design fact & dimension tables for fast queries and clean relations.",
+      "arch.ap3":"<b>Live Power BI.</b> Connect Power BI to MySQL — dashboards update with no manual exports.",
+      "arch.ap4":"<b>Decision-ready.</b> Revenue, user, and package KPIs ready for strategic decisions.",
+      "dash.eyebrow":"04 — Output","dash.h2":"Dashboard showcase","dash.p":"Four production Power BI dashboards built on that architecture. Click to enlarge.",
+      "dash.cap1":"Net Revenue <b>24.68bn</b> · 199.76K users · 2.68bn transactions — payment method & provider breakdown.",
+      "dash.cap2":"914.48K total users · conversion rate <b>17.6%</b> — platform, demographic & sales segmentation.",
+      "dash.cap3":"Package price & discount analysis per price-segment — avg price, discount rate, ARPU.",
+      "dash.cap4":"Tryout · Latsol · Course · Liveclass · Journey activity across platforms & content.",
+      "proj.eyebrow":"06 — Work","proj.h2":"Projects & impact","proj.p":"Other apps, automations, and business analyses I've worked on.",
+      "proj.1":"A Zoom data-analysis app to monitor live classes — built with Python & Streamlit, deployed live.",
+      "proj.2":"A package pricing analysis & optimization dashboard that helps the marketing team set pricing strategy.",
+      "proj.3":"A QC system to detect duplicate questions (ASN, BUMN, Cerebrum) — SQL + Streamlit to safeguard content quality.",
+      "proj.4":"A report-automation program that cuts out the manual work of producing recurring reports.",
+      "proj.5":"Premium-price analysis of 5 competitors, 2026 user forecasts across platforms, and root-cause analysis of Cerebrum's performance dip.",
+      "proj.6":"Consolidating cross-platform data into one warehouse, plus package–journey mapping & dimension-linking variables.",
+      "exp.eyebrow":"07 — Path","exp.h2":"Experience",
+      "exp.t1.when":"Nov 2025 — Present","exp.t1.desc":"End-to-end data pipeline from MySQL, transformation & cleaning, plus interactive Power BI dashboards for strategic decisions.",
+      "exp.t2.role":"Database Engineer (Freelance)","exp.t2.desc":"Google Gemini API-based AI solution (92% accuracy); automated conversion of 10K+ questions for 200+ users, cutting processing time 75%.",
+      "exp.t3.desc":"Python & SQL workshops lifted student performance 30%; graded 500+ assignments.",
+      "exp.t4.role":"Data Analyst Intern","exp.t4.desc":"8 strategic dashboards (85% stakeholder satisfaction); Power BI automation cut reporting time 40% across 5 branches.",
+      "contact.h2":"Let's talk data.","contact.p":"Open to Data Analyst roles, collaborations, or simply trading ideas about dashboards & pipelines.",
+      "contact.dl1":"Resume / CV (PDF)","contact.dl2":"Internship work tracker (XLSX)",
+      "footer.built":"built with data · SQL · Power BI · Python"
+    }
+  };
+
+  const root=document.documentElement;
+  const get=(k)=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+
+  /* ===== THEME ===== */
+  function applyTheme(t){root.setAttribute('data-theme',t);set('theme',t);}
+  applyTheme(get('theme')||'dark');
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+
+  /* ===== ACCENT ===== */
+  function applyAccent(a){
+    root.setAttribute('data-accent',a);set('accent',a);
+    document.querySelectorAll('.sw').forEach(s=>s.setAttribute('aria-pressed',s.dataset.accent===a));
+  }
+  applyAccent(get('accent')||'cyan');
+  document.querySelectorAll('.sw').forEach(s=>{
+    s.addEventListener('click',()=>applyAccent(s.dataset.accent));
+    s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();applyAccent(s.dataset.accent);}});
+  });
+
+  /* ===== LANGUAGE ===== */
+  function applyLang(lang){
+    const dict=I18N[lang]||I18N.id;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const v=dict[el.getAttribute('data-i18n')];if(v!=null)el.textContent=v;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      const v=dict[el.getAttribute('data-i18n-html')];if(v!=null)el.innerHTML=v;
+    });
+    root.setAttribute('lang',lang);set('lang',lang);
+    document.getElementById('langBtn').textContent=lang==='id'?'EN':'ID';
+  }
+  applyLang(get('lang')||'id');
+  document.getElementById('langBtn').addEventListener('click',()=>{
+    applyLang(root.getAttribute('lang')==='id'?'en':'id');
+  });
+
+  /* ===== NAV / REVEAL / LIGHTBOX ===== */
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20));
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll&&e.target.querySelectorAll('.bar-fill').forEach(b=>{b.style.width=(b.dataset.w||0)+'%'});io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const lb=document.getElementById('lb'),lbImg=document.getElementById('lb-img');
+  document.querySelectorAll('.dash').forEach(d=>{
+    d.addEventListener('click',()=>{lbImg.src=d.dataset.full;lb.classList.add('open')});
+  });
+  lb.addEventListener('click',()=>lb.classList.remove('open'));
+  addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open')});
+</script>
+</body>
+</html>
