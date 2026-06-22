@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Ali Akbar Al-Qahri — Data Analyst</title>
 <meta name="description" content="Portofolio Muhammad Ali Akbar Al-Qahri — Data Analyst. Data pipeline end-to-end, star schema, dan dashboard Power BI.">
+<link rel="canonical" href="https://maganghubportofolio.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://maganghubportofolio.vercel.app/">
+<meta property="og:title" content="Muhammad Ali Akbar Al-Qahri — Data Analyst">
+<meta property="og:description" content="End-to-end data pipeline, star schema, and Power BI dashboards at PT Cerebrum Edukanesia Nusantara.">
+<meta property="og:image" content="https://maganghubportofolio.vercel.app/slides/slide-01.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Muhammad Ali Akbar Al-Qahri — Data Analyst">
+<meta name="twitter:description" content="End-to-end data pipeline, star schema, and Power BI dashboards.">
+<meta name="twitter:image" content="https://maganghubportofolio.vercel.app/slides/slide-01.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -347,6 +357,22 @@
   .teams-row .tm{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--txt-dim);border:1px solid var(--line);background:var(--bg-2);border-radius:100px;padding:7px 14px}
   .teams-row .tm b{color:var(--accent)}
 
+  /* ===== SLIDES / DECK ===== */
+  .deck{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--bg-2));padding:20px;position:relative;overflow:hidden}
+  .deck-stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#0a0e14;aspect-ratio:16/9}
+  .deck-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .45s ease;cursor:zoom-in}
+  .deck-stage img.on{opacity:1}
+  .deck-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px}
+  .deck-arrow{width:42px;height:42px;border-radius:9px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line-bright);color:var(--txt);cursor:pointer;transition:all .2s;font-size:1.1rem}
+  .deck-arrow:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+  .deck-dots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;flex:1}
+  .deck-dots b{width:9px;height:9px;border-radius:50%;background:var(--line-bright);cursor:pointer;transition:all .2s;display:block}
+  .deck-dots b.on{background:var(--accent);transform:scale(1.25)}
+  .deck-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:12px}
+  .deck-count{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--txt-dim)}
+  .deck-count b{color:var(--accent)}
+  .deck-dl{display:flex;gap:10px;flex-wrap:wrap}
+
   /* ===== FOOTER ===== */
   footer{border-top:1px solid var(--line);padding:34px 0;margin-top:40px}
   .foot-in{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--txt-faint);flex-wrap:wrap;gap:12px}
@@ -369,6 +395,7 @@
       <a href="#dashboards" data-i18n="nav.dash">dashboards</a>
       <a href="#work" data-i18n="nav.work">track record</a>
       <a href="#projects" data-i18n="nav.projects">projects</a>
+      <a href="#slides" data-i18n="nav.slides">slides</a>
       <a href="#contact" data-i18n="nav.contact">contact</a>
     </div>
     <div class="controls">
@@ -727,6 +754,42 @@
   </div>
 </section>
 
+<section id="slides" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="slides.eyebrow">08 — Deck</span>
+      <h2 data-i18n="slides.h2">Portfolio presentation</h2>
+      <p data-i18n="slides.p">Versi slide dari portofolio ini — tema sama, siap dipresentasikan. Klik slide untuk memperbesar.</p>
+    </div>
+    <div class="deck reveal">
+      <div class="deck-stage" id="deckStage">
+        <img src="slides/slide-01.jpg" class="on" data-full="slides/slide-01.jpg" alt="Slide 1" loading="lazy">
+        <img src="slides/slide-02.jpg" data-full="slides/slide-02.jpg" alt="Slide 2" loading="lazy">
+        <img src="slides/slide-03.jpg" data-full="slides/slide-03.jpg" alt="Slide 3" loading="lazy">
+        <img src="slides/slide-04.jpg" data-full="slides/slide-04.jpg" alt="Slide 4" loading="lazy">
+        <img src="slides/slide-05.jpg" data-full="slides/slide-05.jpg" alt="Slide 5" loading="lazy">
+        <img src="slides/slide-06.jpg" data-full="slides/slide-06.jpg" alt="Slide 6" loading="lazy">
+        <img src="slides/slide-07.jpg" data-full="slides/slide-07.jpg" alt="Slide 7" loading="lazy">
+        <img src="slides/slide-08.jpg" data-full="slides/slide-08.jpg" alt="Slide 8" loading="lazy">
+        <img src="slides/slide-09.jpg" data-full="slides/slide-09.jpg" alt="Slide 9" loading="lazy">
+        <img src="slides/slide-10.jpg" data-full="slides/slide-10.jpg" alt="Slide 10" loading="lazy">
+      </div>
+      <div class="deck-nav">
+        <button class="deck-arrow" id="deckPrev" aria-label="Previous slide">‹</button>
+        <div class="deck-dots" id="deckDots"></div>
+        <button class="deck-arrow" id="deckNext" aria-label="Next slide">›</button>
+      </div>
+      <div class="deck-meta">
+        <span class="deck-count"><b id="deckCur">01</b> / 10</span>
+        <div class="deck-dl">
+          <a href="Portofolio_Ali_Akbar_DataAnalyst.pdf" download class="dl-chip"><span>↓</span> PDF</a>
+          <a href="Portofolio_Ali_Akbar_DataAnalyst.pptx" download class="dl-chip"><span>↓</span> PowerPoint (.pptx)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="wrap">
     <div class="contact reveal">
@@ -760,7 +823,8 @@
   /* ===== i18n DICTIONARY ===== */
   const I18N={
     id:{
-      "nav.about":"tentang","nav.skills":"keahlian","nav.arch":"arsitektur","nav.dash":"dashboard","nav.work":"rekap kerja","nav.projects":"proyek","nav.contact":"kontak",
+      "nav.about":"tentang","nav.skills":"keahlian","nav.arch":"arsitektur","nav.dash":"dashboard","nav.work":"rekap kerja","nav.projects":"proyek","nav.slides":"slide","nav.contact":"kontak",
+      "slides.eyebrow":"08 — Deck","slides.h2":"Presentasi portofolio","slides.p":"Versi slide dari portofolio ini — tema sama, siap dipresentasikan. Klik slide untuk memperbesar.",
       "hero.status":"Data Analyst · Terbuka untuk peluang baru",
       "hero.title":"Mengubah data mentah jadi <span class=\"accent\">keputusan</span> yang bisa ditindaklanjuti.",
       "hero.lead":"Lulusan Data Science yang membangun <b>pipeline end-to-end</b> — dari banyak database terpisah, disatukan lewat <b>star schema</b>, hingga <b>dashboard Power BI</b> yang terhubung langsung ke MySQL.",
@@ -809,7 +873,8 @@
       "footer.built":"dibangun dengan data · SQL · Power BI · Python"
     },
     en:{
-      "nav.about":"about","nav.skills":"skills","nav.arch":"architecture","nav.dash":"dashboards","nav.work":"track record","nav.projects":"projects","nav.contact":"contact",
+      "nav.about":"about","nav.skills":"skills","nav.arch":"architecture","nav.dash":"dashboards","nav.work":"track record","nav.projects":"projects","nav.slides":"slides","nav.contact":"contact",
+      "slides.eyebrow":"08 — Deck","slides.h2":"Portfolio presentation","slides.p":"A slide version of this portfolio — same theme, ready to present. Click a slide to enlarge.",
       "hero.status":"Data Analyst · Available for opportunities",
       "hero.title":"Turning raw data into <span class=\"accent\">decisions</span> you can act on.",
       "hero.lead":"Data Science graduate who builds <b>end-to-end pipelines</b> — from many separate databases, unified through a <b>star schema</b>, to <b>Power BI dashboards</b> wired straight into MySQL.",
@@ -907,6 +972,26 @@
   document.querySelectorAll('.dash').forEach(d=>{
     d.addEventListener('click',()=>{lbImg.src=d.dataset.full;lb.classList.add('open')});
   });
+
+  /* ===== DECK CAROUSEL ===== */
+  (function(){
+    const stage=document.getElementById('deckStage'); if(!stage) return;
+    const imgs=[...stage.querySelectorAll('img')], dots=document.getElementById('deckDots');
+    const cur=document.getElementById('deckCur'); let i=0;
+    imgs.forEach((_,n)=>{const b=document.createElement('b');b.addEventListener('click',()=>go(n));dots.appendChild(b);});
+    const dotEls=[...dots.children];
+    function go(n){i=(n+imgs.length)%imgs.length;imgs.forEach((im,k)=>im.classList.toggle('on',k===i));
+      dotEls.forEach((d,k)=>d.classList.toggle('on',k===i));cur.textContent=String(i+1).padStart(2,'0');}
+    document.getElementById('deckNext').addEventListener('click',()=>go(i+1));
+    document.getElementById('deckPrev').addEventListener('click',()=>go(i-1));
+    imgs.forEach(im=>im.addEventListener('click',()=>{lbImg.src=im.dataset.full;lb.classList.add('open')}));
+    const sec=document.getElementById('slides');
+    addEventListener('keydown',e=>{
+      const r=sec.getBoundingClientRect(), inView=r.top<innerHeight*0.6&&r.bottom>innerHeight*0.4;
+      if(!inView&&!lb.classList.contains('open'))return;
+      if(e.key==='ArrowRight')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+    go(0);
+  })();
   lb.addEventListener('click',()=>lb.classList.remove('open'));
   addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open')});
 </script>

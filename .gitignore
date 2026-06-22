@@ -13,9 +13,14 @@ desktop.ini
 *.log
 node_modules/
 .cache/
+~$*
 ~$*.xlsx
 
 # Original photo source (web uses me.jpg / me.webp)
 me.HEIC
 *.heic
 *.HEIC
+
+# QA render previews (safe to delete the _qa folder)
+_qa/
+slide-*.jpg
