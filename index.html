@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark" data-accent="cyan">
+<html lang="en" data-theme="dark" data-accent="emerald">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -166,6 +166,9 @@
   .mono-init{position:relative;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(4.4rem,11vw,7rem);line-height:1;letter-spacing:-.04em;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:transform .5s ease}
   .photo-card:hover .mono-init{transform:scale(1.05) rotate(-2deg)}
   .mono-sub{position:relative;font-size:.74rem;color:var(--txt-dim);letter-spacing:.06em}
+  .photo-wrap picture,.photo-wrap img{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .photo-wrap img{object-fit:cover;filter:saturate(1.04);transition:transform .5s ease}
+  .photo-card:hover .photo-wrap img{transform:scale(1.04)}
   .photo-meta{padding:14px 16px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--txt-dim);display:flex;justify-content:space-between}
   .photo-meta b{color:#34d399}
 
@@ -403,11 +406,14 @@
         <div class="photo-card">
           <div class="barbar"><span></span><span></span><span></span><em class="bar-file mono">profile.sql</em></div>
           <div class="photo-wrap">
-            <div class="monogram" aria-label="Muhammad Ali Akbar Al-Qahri">
+            <div class="monogram" aria-hidden="true">
               <span class="mono-init">AA</span>
-              <span class="mono-sub mono">M. Ali Akbar Al-Qahri</span>
               <span class="mono-grid"></span>
             </div>
+            <picture>
+              <source srcset="me.webp" type="image/webp">
+              <img src="me.jpg" alt="Muhammad Ali Akbar Al-Qahri" loading="lazy">
+            </picture>
           </div>
           <div class="photo-meta"><span>role</span><b>● Data Analyst</b></div>
         </div>
@@ -866,10 +872,10 @@
 
   /* ===== ACCENT ===== */
   function applyAccent(a){
-    root.setAttribute('data-accent',a);set('accent',a);
+    root.setAttribute('data-accent',a);set('accent_v2',a);
     document.querySelectorAll('.sw').forEach(s=>s.setAttribute('aria-pressed',s.dataset.accent===a));
   }
-  applyAccent(get('accent')||'cyan');
+  applyAccent(get('accent_v2')||'emerald');
   document.querySelectorAll('.sw').forEach(s=>{
     s.addEventListener('click',()=>applyAccent(s.dataset.accent));
     s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();applyAccent(s.dataset.accent);}});
@@ -884,10 +890,10 @@
     document.querySelectorAll('[data-i18n-html]').forEach(el=>{
       const v=dict[el.getAttribute('data-i18n-html')];if(v!=null)el.innerHTML=v;
     });
-    root.setAttribute('lang',lang);set('lang',lang);
+    root.setAttribute('lang',lang);set('lang_v2',lang);
     document.getElementById('langBtn').textContent=lang==='id'?'EN':'ID';
   }
-  applyLang(get('lang')||'id');
+  applyLang(get('lang_v2')||'en');
   document.getElementById('langBtn').addEventListener('click',()=>{
     applyLang(root.getAttribute('lang')==='id'?'en':'id');
   });
